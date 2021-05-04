@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather API</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script>
+         $(document).ready(function() {
+            $('form').submit(function() {
+                // your code here (build up your url)
+                let baseUrl= "http://api.openweathermap.org/data/2.5/weather?q=";
+                let city = $('#city').val();
+                let myAPIKey= ""; // ingresar su propia API
+                  
+                let url= baseUrl + city + "&&appid=" + myAPIKey;
+
+                $.get(url, function(res) {
+                    // your code here
+                    console.log(res);
+                    console.log('summary ', res.weather[0].description);
+                    $('#summary').text(city + ": " + res.weather[0].description);
+
+                    let kelvin= 273.15;
+                    let celciusTemperature;
+
+                    console.log('temp ', res.main.temp);
+                    celciusTemperature= res.main.temp - kelvin;
+                    $('#temp').text("Temperature: " + celciusTemperature + " C");
+
+                    console.log('coords ', res.coord.lon, + ' ' + res.coord.lat);
+                    $('#coords').text('Coord: ' + res.coord.lon + ', ' + res.coord.lat);
+                }, 'json');
+                // don't forget to return false so the page doesn't refresh
+                return false;
+            });
+        });
+            
+    </script>
+</head>
+<body>
+    <div class="container-fluid p-3">
+        <h3>The Weather</h3>
+        <p>Enter your city to check the weather</p>
+        <form>
+            <label for="city">Ciudad:</label>
+            <input id="city" type="text" value="">
+            <button id="send">Check weather</button>
+        </form>
+        <div id="weather">
+            <p id="summary"></p>
+            <p id="temp"></p>
+            <p id="coords"></p>
+        </div>
+    </div>
+</body>
+</html>
